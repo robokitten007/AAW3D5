@@ -41,7 +41,21 @@ class KnightPathFinder
     def new_move_positions(pos)
         KnightPathFinder.valid_moves(pos).select{|ele|!considered_positions.include?(ele)}
     end
-    # private 
-    attr_reader :root_node, :considered_positions, :start_pos
-    attr_writer :root_node
+
+    def find_path(end_pos)
+        @node1 = root_node.dfs(end_pos)
+        trace_path_back
+    end
+
+    def trace_path_back
+        arr = []
+        until @node1.parent.nil?
+            arr << @node1.value
+            @node1 = @node1.parent
+        end
+        arr << @node1.value
+    end
+    private 
+    attr_reader :root_node, :considered_positions, :start_pos, :node1
+    attr_writer :root_node, :node1
 end
