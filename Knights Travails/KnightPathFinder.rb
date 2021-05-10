@@ -28,21 +28,26 @@ class KnightPathFinder
         nodes = [root_node] # node instance  
         i = 0
         while (i < nodes.length)
-            ele = nodes.shift
-            pos = new_move_positions(ele.value)
-            #######
-            current_node = PolyTreeNode.new(ele)
-            pos.each do |po|
-                 node = PolyTreeNode.new(po)
-                 node.parent = current_node
-                 nodes << node
-            end 
+            current_node = nodes.shift
+            new_move_positions(current_node.value)
+            considered_positions.each do |pos|
+                new_node = PolyTreeNode.new (pos)
+                if current_node.parent.nil? || !current_node.parent.children.include?(new_node)
+                    current_node.add_child(new_node)
+                    nodes << new_node
+                end
+            end
+            # current_node = PolyTreeNode.new(ele)
+            # pos.each do |po|
+            #      node = PolyTreeNode.new(po)
+            #      node.parent = current_node
+            #      nodes << node
+            # end 
         end 
     end
 
     def new_move_positions(pos)
-        new_pos = KnightPathFinder.valid_moves(pos).select{|ele|!considered_positions.include?(ele)}
-        @considered_positions += new_pos
+        @considered_positions += KnightPathFinder.valid_moves(pos).select{|ele|!considered_positions.include?(ele)}
     end
     # private 
     attr_reader :root_node, :considered_positions, :start_pos
