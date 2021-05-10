@@ -29,19 +29,17 @@ class KnightPathFinder
         i = 0
         while (i < nodes.length)
             current_node = nodes.shift
-            new_pos = new_move_positions(current_node.value)
-            new_pos.each do |pos|
+            new_move_positions(current_node.value).each do |pos|
                 node = PolyTreeNode.new(pos)
                 current_node.add_child(node)
                 nodes << node
+                @considered_positions << pos
             end 
         end 
     end
 
     def new_move_positions(pos)
-        new_pos = KnightPathFinder.valid_moves(pos).select{|ele|!considered_positions.include?(ele)}
-        @considered_positions += new_pos
-        new_pos
+        KnightPathFinder.valid_moves(pos).select{|ele|!considered_positions.include?(ele)}
     end
     # private 
     attr_reader :root_node, :considered_positions, :start_pos
